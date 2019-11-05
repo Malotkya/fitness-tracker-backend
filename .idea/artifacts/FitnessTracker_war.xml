@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="FitnessTracker:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>FitnessTracker</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="indeproject.war">
+      <element id="artifact" artifact-name="FitnessTracker:war exploded" />
+    </root>
+  </artifact>
+</component>

@@ -3,7 +3,7 @@ package com.alexmalotky.controller;
 
 import com.alexmalotky.entity.Log;
 import com.alexmalotky.entity.User;
-import com.alexmalotky.util.GenericDao;
+import com.alexmalotky.persistance.GenericDao;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

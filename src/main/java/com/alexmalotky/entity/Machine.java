@@ -1,8 +1,12 @@
 package com.alexmalotky.entity;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 @Entity(name = "Machine")
@@ -11,19 +15,68 @@ public class Machine {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
-    private int id;
+    private Integer id;
 
+    @Column(name="title")
     private String name;
-    private String objects;
+
+    private String settings;
     private String notes;
 
     @Column(name="public")
     private Boolean viewable;
 
-    //@OneToMany(mappedBy = "machine", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER )
-    //private Set<Machine>
+    @OneToMany(mappedBy = "machine", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER )
+    private Set<Log> logs;
+
+    public Machine() {
+        name = "";
+        settings = "";
+        notes = "";
+        viewable = false;
+        logs = new HashSet<>();
+    }
+
+    public Machine(JSONObject object) {
+        if(object.isNull("id"))
+            id = null;
+        else
+            id = object.getInt("id");
+        name = object.getString("name");
+        settings = object.getJSONArray("settings").toString();
+        notes = object.getString("notes");
+        viewable = object.getBoolean("public");
+        logs = buildLogs(object.getJSONArray("logs"));
+    }
+
+    @Override
+    public String toString() {
+        return "'Machine'{" + toJson() + "}";
+    }
+
+    public String toJson() {
+        String output = "{ \"id\":" + id +
+                "\"name\":\"" + name + '\"' +
+                ", \"settings\":" + settings +
+                ", \"notes\":\"" + notes + '\"' +
+                ", \"public\":" + viewable +
+                ", \"logs\":[ ";
+
+        for (Iterator<Log> it = logs.iterator(); it.hasNext(); ) {
+            Log l = it.next();
+            output = output.concat( l.toJson() );
+            if(it.hasNext())
+                output = output.concat(", ");
+        }
+
+        output += " ]}";
+
+        return output;
+    }
 
     public int getId() {
+        if(id == null)
+            return -1;
         return id;
     }
 
@@ -39,12 +92,12 @@ public class Machine {
         this.name = name;
     }
 
-    public String getObjects() {
-        return objects;
+    public String getSettings() {
+        return settings;
     }
 
-    public void setObjects(String objects) {
-        this.objects = objects;
+    public void setSettings(String settings) {
+        this.settings = settings;
     }
 
     public String getNotes() {
@@ -63,12 +116,19 @@ public class Machine {
         this.viewable = viewable;
     }
 
-    @Override
-    public String toString() {
-        return "'Machine'{" +
-                ", name:'" + name + '\'' +
-                ", objects:" + objects +
-                ", notes:'" + notes + '\'' +
-                '}';
+    public Set<Log> getLogs() {
+        return logs;
+    }
+
+    public void setLogs(Set<Log> logs) {
+        this.logs = logs;
+    }
+
+    private static Set<Log> buildLogs(JSONArray list) {
+        Set<Log> output = new HashSet<>();
+        for(Object object: list)
+            output.add(new Log((JSONObject)object));
+
+        return output;
     }
 }

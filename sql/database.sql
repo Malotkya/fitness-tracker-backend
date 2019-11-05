@@ -40,7 +40,7 @@ values (
     "Alex",
     "Malotky",
     null,
-    "{\"Settings\":{\"Goal\":250}}"
+    "\"Settings\":{\"Goal\":250}"
 );
 
 insert into machines
@@ -54,7 +54,7 @@ values (
 
 insert into log
 values (
-	now(),
+	NOW(),
     1,
     1,
     "{\"Weight\":300}"

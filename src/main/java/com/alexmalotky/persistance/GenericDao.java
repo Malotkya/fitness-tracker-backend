@@ -1,4 +1,4 @@
-package com.alexmalotky.util;
+package com.alexmalotky.persistance;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -118,9 +118,7 @@ public class GenericDao<T> {
         CriteriaQuery<T> query = builder.createQuery(type);
         Root<T> root = query.from(type);
         query.select(root).where(builder.equal(root.get(propertyName),value));
-        List<T> list = session.createQuery(query).getResultList();
-        session.close();
-        return list;
+        return session.createQuery(query).getResultList();
     }
 
     /**
@@ -143,9 +141,7 @@ public class GenericDao<T> {
         }
         query.select(root).where(builder.and(predicates.toArray(new Predicate[predicates.size()])));
 
-        List<T> list = session.createQuery(query).getResultList();
-        session.close();
-        return list;
+        return session.createQuery(query).getResultList();
     }
 
 

@@ -20,6 +20,7 @@
         <mapping class="com.alexmalotky.entity.Machine" />
         <mapping class="com.alexmalotky.entity.Log" />
 
+
     </session-factory>
 
 </hibernate-configuration>
