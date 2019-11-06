@@ -12,7 +12,7 @@ import java.util.List;
 class JsonParserTest {
 
     private final Logger logger = LogManager.getLogger(this.getClass());
-    private final String json = "{\"id\":1, \"userName\":\"ajmalotky\", \"firstName\":\"Alex\", \"lastName\":\"Malotky\", \"email\":\"null\", \"Settings\":{\"Goal\":250}, \"Activities\": [{ \"name\":\"Settings\", \"settings\":[{\"Value\":\"Weight\", \"Static\":false}, {\"Value\":\"Goal\", \"Static\":true}], \"notes\":\"null\", \"public\":false, \"logs\":[ { \"date\":\"2019-11-04 16:47:46\", \"value\":{\"Weight\":300}} ]}]}";
+    private final String json = "{\"id\":1, \"userName\":\"ajmalotky\", \"password\":\"qwerty\", \"firstName\":\"Alex\", \"lastName\":\"Malotky\", \"email\":\"null\", \"Settings\":{\"Goal\":250}, \"Activities\": [{ \"id\":1,\"name\":\"Settings\", \"settings\":[{\"Value\":\"Weight\", \"Static\":false}, {\"Value\":\"Goal\", \"Static\":true}], \"notes\":\"null\", \"public\":false, \"logs\":[ { \"date\":1572886066000, \"value\":{\"Weight\":300}} ]}]}";
 
     @Test
     void stringifyTest() {
@@ -20,12 +20,12 @@ class JsonParserTest {
 
         User user = userDao.getById(1);
 
-        logger.debug("Stringify:" + user.toJson());
+        //logger.debug("Stringify:" + user.toJson());
     }
 
     @Test
     void parserTest() {
         User user = JsonParser.parse(json);
-        logger.debug("   Parser:" + user.toJson());
+        //logger.debug("   Parser:" + user.toJson());
     }
 }

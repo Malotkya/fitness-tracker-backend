@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity(name = "Machine")
@@ -15,15 +16,13 @@ public class Machine {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
-    private Integer id;
+    private int id;
 
     @Column(name="title")
     private String name;
 
     private String settings;
     private String notes;
-
-    @Column(name="public")
     private Boolean viewable;
 
     @OneToMany(mappedBy = "machine", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER )
@@ -39,7 +38,7 @@ public class Machine {
 
     public Machine(JSONObject object) {
         if(object.isNull("id"))
-            id = null;
+            id = -1;
         else
             id = object.getInt("id");
         name = object.getString("name");
@@ -56,7 +55,7 @@ public class Machine {
 
     public String toJson() {
         String output = "{ \"id\":" + id +
-                "\"name\":\"" + name + '\"' +
+                ", \"name\":\"" + name + '\"' +
                 ", \"settings\":" + settings +
                 ", \"notes\":\"" + notes + '\"' +
                 ", \"public\":" + viewable +
@@ -75,8 +74,6 @@ public class Machine {
     }
 
     public int getId() {
-        if(id == null)
-            return -1;
         return id;
     }
 
@@ -130,5 +127,22 @@ public class Machine {
             output.add(new Log((JSONObject)object));
 
         return output;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Machine)) return false;
+        Machine machine = (Machine) o;
+        return Objects.equals(name, machine.name) &&
+                Objects.equals(settings, machine.settings) &&
+                Objects.equals(notes, machine.notes) &&
+                Objects.equals(viewable, machine.viewable) &&
+                Objects.equals(logs, machine.logs);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, settings, notes, viewable, logs);
     }
 }

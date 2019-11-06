@@ -3,17 +3,17 @@ package com.alexmalotky.persistance;
 import com.alexmalotky.entity.*;
 import com.alexmalotky.util.JsonParser;
 
-import javax.json.Json;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class JsonDao {
     private GenericDao<User> dao = new GenericDao<>(User.class);
 
     public String getByUserId(int id) {
-        return ((User)dao.getById(id)).toJson();
+        User u = dao.getById(id);
+        return u.toJson();
     }
 
     public String insert(String json) {
@@ -22,7 +22,7 @@ public class JsonDao {
         GenericDao<Log> logDao = new GenericDao<>(Log.class);
         Log log = buildFirstLog(u);
 
-        int id = dao.insert(u);
+        int id = (int)dao.insert(u);
         logDao.insert(log);
 
         return getByUserId(id);
@@ -42,11 +42,14 @@ public class JsonDao {
     }
 
     public String saveOrUpdate(String json) {
-        User u = JsonParser.parse(json);
-        saveOrUpdateMachines(u.getMachines());
+        User input = JsonParser.parse(json);
+        saveOrUpdateMachines(input);
 
-        dao.saveOrUpdate(u);
-        return getByUserId(u.getId());
+        User user = dao.getById(input.getId());
+        user.set(input);
+
+        dao.saveOrUpdate(user);
+        return user.toJson();
     }
 
     private static Log buildFirstLog(User user) {
@@ -55,29 +58,39 @@ public class JsonDao {
         l.setMachine(machineDao.getById(1));
         l.setUser(user);
 
-        DateFormat now = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
-        l.setDate(now.format(LocalDate.now()));
-        l.setValue("");
+        l.setDate(new Date());
+        l.setValue("{}");
 
         return l;
     }
 
-    private void saveOrUpdateMachines(Set<Machine> set) {
+    private void saveOrUpdateMachines(User user) {
         GenericDao<Machine> machineDao = new GenericDao<>(Machine.class);
+        Set<Machine> set = user.getMachines();
 
         for (Machine m: set) {
-            if(machineDao.getById(m.getId()) == null)
+            if(machineDao.getById(m.getId()) == null) {
+                Set<Log> buffer = m.getLogs();
+                m.setLogs(new HashSet<>());
                 machineDao.insert(m);
-
-            saveOrUpdateLogs(m.getLogs());
+                m.setLogs(buffer);
+            }
+            saveOrUpdateLogs(m, user);
         }
     }
 
-    private void saveOrUpdateLogs(Set<Log> set) {
-        GenericDao<Log> machineDao = new GenericDao<>(Log.class);
+    private void saveOrUpdateLogs(Machine machine, User user) {
+        GenericDao<Log> logDao = new GenericDao<>(Log.class);
+        Set<Log> set = machine.getLogs();
+        List<Log> list = logDao.findByPropertyEqual("machine", machine);
 
         for (Log l: set) {
-                machineDao.insert(l);
+            if(!list.contains(l)) {
+                l.setMachine(machine);
+                l.setUser(user);
+                logDao.insert(l);
+            }
+
         }
     }
 

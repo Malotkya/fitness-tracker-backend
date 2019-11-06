@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity(name = "User")
@@ -56,12 +57,13 @@ public class User {
         else
             id = object.getInt("id");
         userName = object.getString("userName");
-        password = "";
+        password = object.getString("password");
         firstName = object.getString("firstName");
         lastName = object.getString("lastName");
         email = object.getString("email");
         text = "";
-        machines = buildActivities(object.getJSONArray("Activities"));
+        if( !object.isNull("Activities"))
+            machines = buildActivities(object.getJSONArray("Activities"));
     }
 
     public int getId() {
@@ -136,6 +138,7 @@ public class User {
     public String toJson() {
         String output =   "{\"id\":" + id +
                 ", \"userName\":\"" + userName + '\"' +
+                ", \"password\":\"" + password + '\"' +
                 ", \"firstName\":\"" + firstName + '\"' +
                 ", \"lastName\":\"" + lastName + '\"' +
                 ", \"email\":\"" + email + '\"' +
@@ -160,5 +163,33 @@ public class User {
             output.add(new Machine((JSONObject)object));
 
         return output;
+    }
+
+    public void set(User rhs) {
+        userName = rhs.userName;
+        password = rhs.password;
+        firstName = rhs.firstName;
+        lastName = rhs.lastName;
+        email = rhs.email;
+        text = rhs.text;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        User user = (User) o;
+        return Objects.equals(userName, user.userName) &&
+                Objects.equals(password, user.password) &&
+                Objects.equals(firstName, user.firstName) &&
+                Objects.equals(lastName, user.lastName) &&
+                Objects.equals(email, user.email) &&
+                Objects.equals(text, user.text) &&
+                Objects.equals(machines, user.machines);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userName, password, firstName, lastName, email, text, machines);
     }
 }

@@ -9,11 +9,11 @@ import java.util.Objects;
 public class LogPK implements Serializable {
     protected User user;
     protected Machine machine;
-    protected String date;
+    protected Date date;
 
     public LogPK() {}
 
-    public LogPK(User user, Machine machine, String date) {
+    public LogPK(User user, Machine machine, Date date) {
         this.user = user;
         this.machine = machine;
         this.date = date;
@@ -50,11 +50,11 @@ public class LogPK implements Serializable {
         this.machine = machine;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 }

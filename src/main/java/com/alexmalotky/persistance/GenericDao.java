@@ -81,11 +81,11 @@ public class GenericDao<T> {
      *
      * @param entity entity to be inserted
      */
-    public int insert(T entity) {
-        int id = 0;
+    public Object insert(T entity) {
+        Object id = null;
         Session session = getSession();
         Transaction transaction = session.beginTransaction();
-        id = (int)session.save(entity);
+        id = session.save(entity);
         transaction.commit();
         session.close();
         return id;

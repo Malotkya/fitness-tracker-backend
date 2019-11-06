@@ -19,7 +19,7 @@ create table machines (
     title varchar (30),
     settings text, -- [ {"Value":"Column1", "Static":false}, {"Value":"Column2", "Static":true}, {"Value":"Column3", "Static":false}]
     notes varchar(255),
-    public bool
+    viewable bool
 );
 
 create table log (
@@ -47,9 +47,9 @@ insert into machines
 values (
 	1,
     "Settings",
-    "[{\"Value\":\"Weight\", \"Static\":false}, {\"Value\":\"Goal\", \"Static\":true}]",
+    "[{\"Value\":\"Weight\", \"Static\":false},{\"Value\":\"Goal\", \"Static\":true}]",
     null,
-    false
+    true
 );
 
 insert into log
@@ -62,7 +62,7 @@ values (
 
 SELECT entry, title, value, settings, notes FROM machines
 JOIN log ON log.machine_id = machines.id
-WHERE user_id = 1
 ORDER By entry;
 
 SELECT * FROM users;
+SELECT * FROM machines;

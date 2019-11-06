@@ -1,10 +1,12 @@
 package com.alexmalotky.entity;
 
 import com.alexmalotky.key.LogPK;
+import jdk.jfr.Timestamp;
 import org.json.JSONObject;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity(name = "Log")
 @Table(name = "log")
@@ -22,18 +24,19 @@ public class Log {
     private Machine machine;
 
     @Id
-    @Column(name="entry")
-    private String date;
+    @Column(name="entry", columnDefinition="DATETIME")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date date;
 
     private String value;
 
     public Log() {
-        date = "";
+        date = new Date();
         value = "";
     }
 
     public Log(JSONObject object) {
-        date = object.getString("date");
+        date = new Date(object.getLong("date"));
         value = object.getJSONObject("value").toString();
     }
 
@@ -43,7 +46,7 @@ public class Log {
     }
 
     public String toJson() {
-        return "{ \"date\":\"" + date + '\"' +
+        return "{ \"date\":" + date.getTime() +
                 ", \"value\":" + value + '}';
     }
 
@@ -63,11 +66,11 @@ public class Log {
         this.machine = machine;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -79,5 +82,16 @@ public class Log {
         this.value = value;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Log)) return false;
+        Log log = (Log) o;
+        return value.equals(log.value);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(value);
+    }
 }
