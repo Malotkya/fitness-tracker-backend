@@ -57,13 +57,23 @@ public class User {
         else
             id = object.getInt("id");
         userName = object.getString("userName");
-        password = object.getString("password");
         firstName = object.getString("firstName");
         lastName = object.getString("lastName");
         email = object.getString("email");
         text = "";
         if( !object.isNull("Activities"))
             machines = buildActivities(object.getJSONArray("Activities"));
+    }
+
+    public User(String userName, String password, String firstName, String lastName, String email) {
+        this.id = 0;
+        this.userName = userName;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.text = "";
+        this.machines = new HashSet<>();
     }
 
     public int getId() {
@@ -138,7 +148,6 @@ public class User {
     public String toJson() {
         String output =   "{\"id\":" + id +
                 ", \"userName\":\"" + userName + '\"' +
-                ", \"password\":\"" + password + '\"' +
                 ", \"firstName\":\"" + firstName + '\"' +
                 ", \"lastName\":\"" + lastName + '\"' +
                 ", \"email\":\"" + email + '\"' +
@@ -167,7 +176,6 @@ public class User {
 
     public void set(User rhs) {
         userName = rhs.userName;
-        password = rhs.password;
         firstName = rhs.firstName;
         lastName = rhs.lastName;
         email = rhs.email;
