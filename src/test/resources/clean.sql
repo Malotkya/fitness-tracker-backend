@@ -46,7 +46,7 @@ values (
 
 insert into log
 values (
-	NOW(),
+	1573553736000,
     1,
     1,
     "{\"Weight\":300}"
@@ -54,7 +54,7 @@ values (
 
 insert into log
 values (
-	NOW(),
+	1573553736000,
     1,
     2,
     "{\"Time\":\"10 minutes\"}"
@@ -62,7 +62,7 @@ values (
 
 insert into log
 values (
-	NOW(),
+	1573553736000,
     1,
     3,
     "{\"Reps\":12, \"Weight\":100}"

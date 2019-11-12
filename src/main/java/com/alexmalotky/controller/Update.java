@@ -34,7 +34,8 @@ public class Update extends HttpServlet {
         } catch (Exception e) {
             response.setStatus(500);
             dom.write(e.getMessage());
-            logger.error(e.getStackTrace());
+            logger.error(e.getMessage());
+            e.printStackTrace();
         }
 
 

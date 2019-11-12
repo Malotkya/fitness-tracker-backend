@@ -62,7 +62,7 @@ public class User {
         email = object.getString("email");
         text = "";
         if( !object.isNull("Activities"))
-            machines = buildActivities(object.getJSONArray("Activities"));
+            machines = buildActivities(object.getJSONArray("Activities"), this);
     }
 
     public User(String userName, String password, String firstName, String lastName, String email) {
@@ -166,10 +166,10 @@ public class User {
         return output;
     }
 
-    private static Set<Machine> buildActivities(JSONArray list) {
+    private static Set<Machine> buildActivities(JSONArray list, User user) {
         Set<Machine> output = new HashSet<>();
         for(Object object: list)
-            output.add(new Machine((JSONObject)object));
+            output.add(new Machine( (JSONObject)object, user));
 
         return output;
     }
@@ -191,13 +191,11 @@ public class User {
                 Objects.equals(password, user.password) &&
                 Objects.equals(firstName, user.firstName) &&
                 Objects.equals(lastName, user.lastName) &&
-                Objects.equals(email, user.email) &&
-                Objects.equals(text, user.text) &&
-                Objects.equals(machines, user.machines);
+                Objects.equals(email, user.email);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userName, password, firstName, lastName, email, text, machines);
+        return Objects.hash(userName, password, firstName, lastName, email);
     }
 }

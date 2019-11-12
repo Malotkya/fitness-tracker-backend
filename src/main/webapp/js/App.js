@@ -60,7 +60,7 @@ class App {
     };
 
     create = () => {
-        //frmSignUp.show();
+        this.frmSignUp.show();
     };
 
     delete = () => {

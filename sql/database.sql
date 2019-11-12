@@ -23,7 +23,7 @@ create table machines (
 );
 
 create table log (
-	entry datetime,
+	entry bigint,
     user_id int,
     machine_id int,
     value text, -- {"Column1":value, "Column3":value}

@@ -1,7 +1,6 @@
 package com.alexmalotky.entity;
 
 import com.alexmalotky.key.LogPK;
-import jdk.jfr.Timestamp;
 import org.json.JSONObject;
 
 import javax.persistence.*;
@@ -24,29 +23,44 @@ public class Log {
     private Machine machine;
 
     @Id
-    @Column(name="entry", columnDefinition="DATETIME")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date date;
+    @Column(name="entry") //, columnDefinition="DATETIME")
+    //@Temporal(TemporalType.TIMESTAMP)
+    private long date;
 
     private String value;
 
     public Log() {
-        date = new Date();
+        date = new Date().getTime();
         value = "";
     }
 
-    public Log(JSONObject object) {
-        date = new Date(object.getLong("date"));
+    public Log(JSONObject object, User u, Machine m) {
+        user = u;
+        machine = m;
+        date = object.getLong("date");
         value = object.getJSONObject("value").toString();
     }
 
     @Override
     public String toString() {
-        return "'Log'"+ toJson();
+        String output = "'Log'"+ toJson() + " UserID: " ;
+        if( user == null )
+            output += "null";
+        else
+            output += user.getId();
+
+        output += " MachineID: ";
+
+        if( machine == null )
+            output += "null";
+        else
+            output += machine.getId();
+
+        return output;
     }
 
     public String toJson() {
-        return "{ \"date\":" + date.getTime() +
+        return "{ \"date\":" + date +
                 ", \"value\":" + value + '}';
     }
 
@@ -66,11 +80,11 @@ public class Log {
         this.machine = machine;
     }
 
-    public Date getDate() {
+    public long getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(long date) {
         this.date = date;
     }
 
@@ -87,11 +101,25 @@ public class Log {
         if (this == o) return true;
         if (!(o instanceof Log)) return false;
         Log log = (Log) o;
-        return value.equals(log.value);
+        boolean user, machine, date;
+
+        if(this.user == null || log.user == null)
+            user = (this.user == null) && (log.user == null);
+        else
+            user = this.user.equals(log.user);
+
+        if(this.machine == null || log.machine == null)
+            machine = (this.machine == null) && (log.machine == null);
+        else
+            machine = this.machine.equals(log.machine);
+
+        date = this.date == log.date;
+
+        return user && machine && date;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(value);
+        return Objects.hash(date, value);
     }
 }

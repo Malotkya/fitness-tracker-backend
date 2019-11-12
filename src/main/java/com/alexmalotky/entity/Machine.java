@@ -36,7 +36,7 @@ public class Machine {
         logs = new HashSet<>();
     }
 
-    public Machine(JSONObject object) {
+    public Machine(JSONObject object, User user) {
         if(object.isNull("id"))
             id = -1;
         else
@@ -45,7 +45,7 @@ public class Machine {
         settings = object.getJSONArray("settings").toString();
         notes = object.getString("notes");
         viewable = object.getBoolean("public");
-        logs = buildLogs(object.getJSONArray("logs"));
+        logs = buildLogs(object.getJSONArray("logs"), user, this);
     }
 
     @Override
@@ -121,10 +121,10 @@ public class Machine {
         this.logs = logs;
     }
 
-    private static Set<Log> buildLogs(JSONArray list) {
+    private static Set<Log> buildLogs(JSONArray list, User user, Machine machine) {
         Set<Log> output = new HashSet<>();
         for(Object object: list)
-            output.add(new Log((JSONObject)object));
+            output.add(new Log((JSONObject)object, user, machine));
 
         return output;
     }
@@ -134,15 +134,11 @@ public class Machine {
         if (this == o) return true;
         if (!(o instanceof Machine)) return false;
         Machine machine = (Machine) o;
-        return Objects.equals(name, machine.name) &&
-                Objects.equals(settings, machine.settings) &&
-                Objects.equals(notes, machine.notes) &&
-                Objects.equals(viewable, machine.viewable) &&
-                Objects.equals(logs, machine.logs);
+        return Objects.equals(name, machine.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, settings, notes, viewable, logs);
+        return Objects.hash(name);
     }
 }

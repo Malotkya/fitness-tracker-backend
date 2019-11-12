@@ -1,15 +1,18 @@
 package com.alexmalotky.persistance;
 
 import com.alexmalotky.entity.*;
+import com.alexmalotky.key.LogPK;
 import com.alexmalotky.util.JsonParser;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class JsonDao {
     private GenericDao<User> dao = new GenericDao<>(User.class);
+    private final Logger logger = LogManager.getLogger(this.getClass());
 
     public String getByUserId(int id) {
         User u = dao.getById(id);
@@ -38,19 +41,18 @@ public class JsonDao {
 
         GenericDao<Machine> machineDao = new GenericDao<>(Machine.class);
         for(Machine m: set) {
-            if( !m.getViewable() )
-                machineDao.delete(m);
+            deleteMachine(m);
         }
     }
 
     public String saveOrUpdate(String json) {
         User input = JsonParser.parse(json);
-        saveOrUpdateMachines(input);
 
+        updateMachines(input);
         User user = dao.getById(input.getId());
         user.set(input);
-
         dao.saveOrUpdate(user);
+
         return user.toJson();
     }
 
@@ -60,40 +62,40 @@ public class JsonDao {
         l.setMachine(machineDao.getById(1));
         l.setUser(user);
 
-        l.setDate(new Date());
+        l.setDate(new Date().getTime());
         l.setValue("{}");
 
         return l;
     }
 
-    private void saveOrUpdateMachines(User user) {
-        GenericDao<Machine> machineDao = new GenericDao<>(Machine.class);
+    private void updateMachines(User user) {
+
+        //Set up session
+        Session session = getSession();
         Set<Machine> set = user.getMachines();
 
-        for (Machine m: set) {
-            if(machineDao.getById(m.getId()) == null) {
-                Set<Log> buffer = m.getLogs();
-                m.setLogs(new HashSet<>());
-                machineDao.insert(m);
-                m.setLogs(buffer);
-            }
-            saveOrUpdateLogs(m, user);
+        for(Machine m: set) {
+            //Set up transaction
+            Transaction transaction = session.beginTransaction();
+            session.saveOrUpdate(m);
+            transaction.commit();
+        }
+
+        session.close();
+    }
+
+    private void deleteMachine(Machine machine) {
+        if( !machine.getViewable() ) {
+            Session session = getSession();
+            Transaction transaction = session.beginTransaction();
+            session.delete(machine);
+            transaction.commit();
+            session.close();
         }
     }
 
-    private void saveOrUpdateLogs(Machine machine, User user) {
-        GenericDao<Log> logDao = new GenericDao<>(Log.class);
-        Set<Log> set = machine.getLogs();
-        List<Log> list = logDao.findByPropertyEqual("machine", machine);
-
-        for (Log l: set) {
-            if(!list.contains(l)) {
-                l.setMachine(machine);
-                l.setUser(user);
-                logDao.insert(l);
-            }
-
-        }
+    private Session getSession() {
+        return SessionFactoryProvider.getSessionFactory().openSession();
     }
 
 }
