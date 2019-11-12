@@ -8,7 +8,6 @@ import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import javax.json.Json;
 import java.util.Date;
 import java.util.List;
 
@@ -18,6 +17,8 @@ class JsonDaoTest {
 
     private final Logger logger = LogManager.getLogger(this.getClass());
     private JsonDao dao = new JsonDao();
+
+    private String newLogServerString = "{\"id\":1,\"userName\":\"ajmalotky\", \"firstName\":\"Alex\",\"lastName\":\"Malotky\",\"email\":\"null\",\"Settings\":{\"Goal\":250},\"Running\":{\"Laps\":4},\"Bench Press\":{\"Seat Position\":2.5},\"Activities\":[{\"id\":1,\"name\":\"Settings\",\"settings\":[{\"Value\":\"Weight\",\"Static\":false},{\"Value\":\"Goal\",\"Static\":true}],\"notes\":\"null\",\"public\":true,\"logs\":[{\"date\":1573487637000,\"value\":{\"Weight\":300}},{\"date\":1573512952000,\"value\":{\"Weight\":\"330\"}}]},{\"id\":3,\"name\":\"Bench Press\",\"settings\":[{\"Value\":\"Seat Position\",\"Static\":true},{\"Value\":\"Weight\",\"Static\":false},{\"Value\":\"Reps\",\"Static\":false}],\"notes\":\"null\",\"public\":true,\"logs\":[{\"date\":1573487637000,\"value\":{\"Reps\":12,\"Weight\":100}}]},{\"id\":2,\"name\":\"Running\",\"settings\":[{\"Value\":\"Laps\",\"Static\":true},{\"Value\":\"Time\",\"Static\":false}],\"notes\":\"null\",\"public\":true,\"logs\":[{\"date\":1573487637000,\"value\":{\"Time\":\"10 minutes\"}}]}]}";
 
     @BeforeEach
     void setUp () {
@@ -77,14 +78,7 @@ class JsonDaoTest {
     void updateNewLogTest() {
         String json = dao.getByUserId(1);
         User u = JsonParser.parse(json);
-
-        Log l = new Log();
-        l.setDate(new Date());
-        l.setValue("{\"Weight\":500}");
-
-        Machine m = (Machine)u.getMachines().toArray()[0];
-        m.getLogs().add(l);
-        String newJson = u.toJson();
+        String newJson = newLogServerString;
 
         assertNotEquals(json, newJson);
         dao.saveOrUpdate(newJson);

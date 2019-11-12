@@ -30,7 +30,6 @@ public class JsonParser {
     private static String pullLeftOvers(JSONObject object) {
         object.remove("id");
         object.remove("userName");
-        object.remove("password");
         object.remove("firstName");
         object.remove("lastName");
         object.remove("email");

@@ -17,8 +17,10 @@ public class JsonDao {
     }
 
     public String insert(String json) {
-        User u = JsonParser.parse(json);
+        return insert(JsonParser.parse(json));
+    }
 
+    public String insert(User u) {
         GenericDao<Log> logDao = new GenericDao<>(Log.class);
         Log log = buildFirstLog(u);
 
