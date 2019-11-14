@@ -14,7 +14,9 @@
             </div>
 
             <div class="modal-footer">
-                <button id="submit" class="btn btn-primary form-control"></button>
+                <button id="submit" class="btn btn-primary form-control">
+                    <span class='spinner-border spinner-border-sm'></span> Sign In
+                </button>
             </div>
 
         </div>

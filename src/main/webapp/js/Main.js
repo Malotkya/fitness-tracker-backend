@@ -4,18 +4,18 @@ class Main {
         this.cardTemplate = document.querySelector(".card");
     }
 
-    show = user => {
-        if(user != null)
-            this.parent.user = user;
+    show = () => {
+        let user = this.parent.getLoggedIn();
 
         this.parent.display.innerText = "";
-        this.parent.user.Activities.forEach(activity => {
+        user.Activities.forEach(activity => {
             this.parent.display.appendChild(this.buildActivityCard(activity).node);
         });
     };
 
     buildActivityCard = object => {
-        let stats = this.parent.user[object.name];
+        let user = this.parent.getLoggedIn();
+        let stats = user[object.name];
         let logs = object.logs;
 
         let staticList = object.settings.filter(item => item.Static);
@@ -55,7 +55,7 @@ class Main {
     };
 
     update = (name, log) => {
-        let activities = this.parent.user.Activities;
+        let activities = this.parent.getLoggedIn().Activities;
         let logs = [];
 
         activities.forEach(activity => {
@@ -74,7 +74,7 @@ class Main {
         if(newLog)
             logs.push(log);
 
-        console.log(JSON.stringify(this.parent.user));
+        console.log(JSON.stringify(sessionStorage.getItem("user")));
         this.parent.updateLogs();
     }
 }

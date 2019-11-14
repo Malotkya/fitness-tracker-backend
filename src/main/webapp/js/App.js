@@ -7,7 +7,6 @@ class App {
         this.frmSignUp = new Signup(this);
         //this.frmSettings = new Settings(this);
         this.navBar = new NavBar(this);
-        this.user = null;
 
         this.clearErrors();
     }
@@ -32,44 +31,24 @@ class App {
         document.querySelector("#error").innerHTML = "";
     };
 
-    login = () => {
-        this.navBar.showSignUp();
-        this.frmLogin.show();
-    };
-
     updateLogs = () => {
-        makeRequest("Update", "user=" + JSON.stringify(this.user)).then(user => {
+        makeRequest("Update", "user=" + JSON.stringify(sessionStorage.getItem("user"))).then(user => {
             this.main(user);
         }).catch(e => {
             this.error(e);
-        })
+        });
     };
 
     updateSettings = () => {
-        makeRequest("Update", "user=" + JSON.stringify(this.user)).then(user => {
+        makeRequest("Update", "user=" + JSON.stringify(sessionStorage.getItem("user"))).then(user => {
             this.settings(user);
         }).catch(e => {
             this.error(e);
         })
     };
 
-    logout = () => {
-        this.user = null;
-        //TODO: do something with the session
-        this.login();
-    };
-
     create = () => {
         this.frmSignUp.show();
-    };
-
-    delete = () => {
-
-    };
-
-    main = user => {
-        this.navBar.showSignOut();
-        this.frmMain.show(user);
     };
 
     settings = user => {
@@ -77,11 +56,32 @@ class App {
         //this.frmSettings.show(user);
     };
 
-    show = () => {
-        if(this.user == null)
-            this.login();
-        else
-            this.main();
-    }
+    show = user => {
+        this.login(user);
+        if(this.getLoggedIn() === null) {
+            this.navBar.showSignUp();
+            this.frmLogin.show();
+        } else {
+            this.navBar.showSignOut();
+            this.frmMain.show();
+        }
+    };
+
+    getLoggedIn = () => {
+        let user = sessionStorage.getItem("user");
+        if(user === undefined || user === "")
+            return null;
+        return JSON.parse(user);
+    };
+
+    login = user => {
+        if( !(user || user === null || user === undefined) )
+            sessionStorage.setItem("user", JSON.stringify(user));
+    };
+
+    logout = () => {
+        sessionStorage.clear();
+        this.show();
+    };
 }
 

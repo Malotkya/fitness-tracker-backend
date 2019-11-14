@@ -2,14 +2,14 @@ class Signup {
     constructor(parent) {
         this.parent = parent;
         this.form = document.querySelector("#sign-up");
-        let button = this.form.querySelector("#submit");
+        this.button = this.form.querySelector("#submit");
 
-        button.addEventListener("click", this.testInputs);
-        this.spinner = button.querySelector("span");
+        this.button.addEventListener("click", this.testInputs);
+        this.spinner = this.button.querySelector("span");
     };
 
     testInputs = () => {
-        this.spinner.setAttribute("style", "display:inline");
+        this.disable();
 
         let userName = this.form.querySelector("#username");
         let password1 = this.form.querySelector("#password1");
@@ -30,19 +30,28 @@ class Signup {
             this.performSignUp(userName, password1, firstName, lastName, email);
         } else {
             this.parent.error(errorMessage);
-            this.spinner.setAttribute("style", "display:none");
+            this.enable();
         }
 
     };
 
     performSignUp = (userName, password, firstName, lastName,  email) => {
         console.log("Success!");
-        this.parent.show();
     };
 
     show = () => {
-        this.spinner.setAttribute("style", "display:none");
+        this.enable();
         this.parent.display.innerHTML = "";
         this.parent.display.appendChild(this.form);
+    };
+
+    disable = () => {
+        this.spinner.setAttribute("style", "display:inline");
+        this.button.disabled = true;
+    };
+
+    enable = () => {
+        this.spinner.setAttribute("style", "display:none");
+        this.button.disabled = false;
     };
 }

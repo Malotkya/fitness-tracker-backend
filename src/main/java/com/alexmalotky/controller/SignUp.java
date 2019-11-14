@@ -17,7 +17,7 @@ import java.io.PrintWriter;
 import java.util.List;
 
 
-@WebServlet( urlPatterns = {"/Login"} )
+@WebServlet( urlPatterns = {"/SignUp"} )
 public class SignUp extends HttpServlet {
 
     private final Logger logger = LogManager.getLogger(this.getClass());

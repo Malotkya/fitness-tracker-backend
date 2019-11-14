@@ -2,7 +2,7 @@ const updateTime = 3600000 * 3; // 3 hours
 
 let init  = () => {
     let app = new App();
-    app.login();
+    app.show();
 }; window.onload = init;
 
 const makeRequest = (url, parameters) => {
@@ -25,3 +25,4 @@ const makeRequest = (url, parameters) => {
         xhr.send(parameters);
     });
 };
+
