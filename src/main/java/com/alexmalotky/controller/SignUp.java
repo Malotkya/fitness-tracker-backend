@@ -2,7 +2,6 @@ package com.alexmalotky.controller;
 
 import com.alexmalotky.entity.User;
 import com.alexmalotky.persistance.JsonDao;
-import com.alexmalotky.util.JsonParser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mindrot.jbcrypt.BCrypt;
@@ -14,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 
 
 @WebServlet( urlPatterns = {"/SignUp"} )
@@ -37,6 +35,7 @@ public class SignUp extends HttpServlet {
         try {
             User newUser = new User(userName, password, firstName, lastName, email);
             String user = dao.insert(newUser);
+            logger.debug(user);
             dom.write(user);
 
         } catch(Exception e) {
