@@ -31,20 +31,13 @@ class App {
         document.querySelector("#error").innerHTML = "";
     };
 
-    updateLogs = () => {
-        makeRequest("Update", "user=" + JSON.stringify(sessionStorage.getItem("user"))).then(user => {
-            this.main(user);
+    update = user => {
+        let userString = JSON.stringify(user);
+        makeRequest("Update", `user=${userString}`).then(user => {
+            this.show(user);
         }).catch(e => {
             this.error(e);
         });
-    };
-
-    updateSettings = () => {
-        makeRequest("Update", "user=" + JSON.stringify(sessionStorage.getItem("user"))).then(user => {
-            this.settings(user);
-        }).catch(e => {
-            this.error(e);
-        })
     };
 
     create = () => {
@@ -52,8 +45,11 @@ class App {
     };
 
     settings = user => {
-        this.navBar.showSignOut();
         //this.frmSettings.show(user);
+    };
+
+    home = () => {
+        show();
     };
 
     show = user => {
@@ -75,12 +71,13 @@ class App {
     };
 
     login = user => {
-        if( !(user || user === null || user === undefined) )
+        if( user !== null && user !== undefined )
             sessionStorage.setItem("user", JSON.stringify(user));
     };
 
     logout = () => {
         sessionStorage.clear();
+        this.clearErrors();
         this.show();
     };
 }
