@@ -11,12 +11,12 @@ class Signup {
     testInputs = () => {
         this.disable();
 
-        let userName = this.form.querySelector("#username");
-        let password1 = this.form.querySelector("#password1");
-        let password2 = this.form.querySelector("#password2");
-        let firstName = this.form.querySelector("#firstName");
-        let lastName = this.form.querySelector("#lastName");
-        let email = this.form.querySelector("#email");
+        let userName = this.form.querySelector("#username").value;
+        let password1 = this.form.querySelector("#password1").value;
+        let password2 = this.form.querySelector("#password2").value;
+        let firstName = this.form.querySelector("#firstName").value;
+        let lastName = this.form.querySelector("#lastName").value;
+        let email = this.form.querySelector("#email").value;
 
         let errorMessage = "";
 
@@ -24,7 +24,7 @@ class Signup {
         // errorMessage += "UserName is already taken.<br />
 
         if(password1 !== password2)
-            errorMessage += "The passwords do not match!<br />";
+            errorMessage += "The passwords do not match!\n";
 
         if(errorMessage === "") {
             this.performSignUp(userName, password1, firstName, lastName, email);
@@ -36,7 +36,9 @@ class Signup {
     };
 
     performSignUp = (userName, password, firstName, lastName,  email) => {
-        console.log("Success!");
+        makeRequest("SignUp", `userName=${userName}&password=${password}&firstName=${firstName}&lastName=${lastName}&email=${email}`)
+            .then( user => this.parent.show(user) )
+            .catch(e=> this.parent.error(e) );
     };
 
     show = () => {
@@ -46,7 +48,7 @@ class Signup {
     };
 
     disable = () => {
-        this.spinner.setAttribute("style", "display:inline");
+        this.spinner.setAttribute("style", "display:inline-block");
         this.button.disabled = true;
     };
 
