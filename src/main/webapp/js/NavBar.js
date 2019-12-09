@@ -5,7 +5,7 @@ class NavBar {
         this.loggedOut = [...document.querySelectorAll(".btn-logged-out")];
         this.loggedIn = [...document.querySelectorAll(".btn-logged-in")];
 
-        document.querySelector("#Home").addEventListener("click", this.parent.show);
+        document.querySelector("#Home").addEventListener("click", this.parent.home);
         document.querySelector("#SignUp").addEventListener("click", this.parent.create);
         document.querySelector("#SignOut").addEventListener("click", this.parent.logout);
         //document.querySelector("#Settings").addEventListener("click", this.parent.error);
