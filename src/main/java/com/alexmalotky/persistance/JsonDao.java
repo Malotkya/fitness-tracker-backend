@@ -1,7 +1,6 @@
 package com.alexmalotky.persistance;
 
 import com.alexmalotky.entity.*;
-import com.alexmalotky.key.LogPK;
 import com.alexmalotky.util.JsonParser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -63,7 +62,7 @@ public class JsonDao {
         l.setUser(user);
 
         l.setDate(new Date().getTime());
-        l.setValue("{}");
+        l.setValue("{\"Weight\":\"\"}");
 
         return l;
     }
