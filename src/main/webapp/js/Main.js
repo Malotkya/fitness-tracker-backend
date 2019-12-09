@@ -55,10 +55,10 @@ class Main {
     };
 
     update = (name, log) => {
-        let activities = this.parent.getLoggedIn().Activities;
+        let user = this.parent.getLoggedIn();
         let logs = [];
 
-        activities.forEach(activity => {
+        user.Activities.forEach(activity => {
             if(activity.name === name)
                 logs = activity.logs;
         });
@@ -74,7 +74,7 @@ class Main {
         if(newLog)
             logs.push(log);
 
-        console.log(JSON.stringify(sessionStorage.getItem("user")));
-        this.parent.updateLogs();
+        console.log(user);
+        this.parent.update(user);
     }
 }
