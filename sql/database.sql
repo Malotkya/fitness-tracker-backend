@@ -6,7 +6,7 @@ drop table users;
 
 create table users (
 	id int primary key auto_increment,
-    user_name varchar(20), 
+    user_name varchar(20) unique, 
     password varchar(256),
     first_name varchar(20),
     last_name varchar(20),
