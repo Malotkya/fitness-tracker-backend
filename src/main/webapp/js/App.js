@@ -5,7 +5,7 @@ class App {
         this.frmMain = new Main(this);
         this.frmLogin = new Login(this);
         this.frmSignUp = new Signup(this);
-        //this.frmSettings = new Settings(this);
+        this.frmSettings = new Settings(this);
         this.navBar = new NavBar(this);
 
         this.clearErrors();
@@ -44,12 +44,12 @@ class App {
         this.frmSignUp.show();
     };
 
-    settings = user => {
-        //this.frmSettings.show(user);
+    settings = () => {
+        this.frmSettings.show();
     };
 
     home = () => {
-        show();
+        this.show();
     };
 
     show = user => {

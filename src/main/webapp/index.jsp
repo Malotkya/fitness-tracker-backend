@@ -16,6 +16,7 @@
         <%@include file="jsp/login.jsp" %>
         <%@include file="jsp/signup.jsp"%>
         <%@include file="jsp/card.jsp"%>
+        <%@include file="jsp/settings.jsp"%>
     </main>
 </div>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
@@ -28,6 +29,7 @@
 <script src="js/NavBar.js"></script>
 <script src="js/Main.js"></script>
 <script src="js/Login.js"></script>
+<script src="js/Settings.js"></script>
 <script src="js/App.js"></script>
 </body>
 </html>
