@@ -11,7 +11,7 @@ class Login {
         let username = document.querySelector("#username").value;
         let password = document.querySelector("#password").value;
 
-        makeRequest("Login", "username=" + username + "&password=" + password).then(user => {
+        makeRequest("Login", `username=${username}&password=${password}`).then(user => {
             this.parent.show(user);
         }).catch(e => {
             this.parent.error(e);
@@ -26,7 +26,7 @@ class Login {
     };
 
     disable = () => {
-        this.spinner.setAttribute("style", "display:inline");
+        this.spinner.setAttribute("style", "display:inline-block");
         this.button.removeEventListener("click", this.performLogin);
     };
 
