@@ -40,8 +40,7 @@ public class Login extends HttpServlet {
 
             if(BCrypt.checkpw(password,user.getPassword())) {
                 dom.print(JsonParser.stringify(user));
-                //TODO: Add key to session for security
-
+                //TODO add something to the session for security
             } else { // Invalid password
                 dom.print("UserName or Password Incorrect!");
                 response.setStatus(401);
