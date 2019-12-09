@@ -24,9 +24,11 @@ public class JsonDao {
 
     public String insert(User u) {
         GenericDao<Log> logDao = new GenericDao<>(Log.class);
-        Log log = buildFirstLog(u);
 
+        u.setText("\"Settings\":{\"Goal\":\"\"}");
         int id = (int)dao.insert(u);
+
+        Log log = buildFirstLog(u);
         logDao.insert(log);
 
         return getByUserId(id);
