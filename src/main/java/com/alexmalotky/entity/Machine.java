@@ -50,10 +50,10 @@ public class Machine {
 
     @Override
     public String toString() {
-        return "'Machine'{" + toJson() + "}";
+        return "'Machine'{" + toJson(null) + "}";
     }
 
-    public String toJson() {
+    public String toJson(Integer userId) {
         String output = "{ \"id\":" + id +
                 ", \"name\":\"" + name + '\"' +
                 ", \"settings\":" + settings +
@@ -61,11 +61,15 @@ public class Machine {
                 ", \"public\":" + viewable +
                 ", \"logs\":[ ";
 
-        for (Iterator<Log> it = logs.iterator(); it.hasNext(); ) {
-            Log l = it.next();
-            output = output.concat( l.toJson() );
-            if(it.hasNext())
-                output = output.concat(", ");
+        boolean first = true;
+        for (Log l : logs )
+            if(userId == null || userId == l.getUser().getId()) {
+                if(first) {
+                    first = false;
+                } else {
+                    output = output.concat(", ");
+                }
+                output = output.concat( l.toJson() );
         }
 
         output += " ]}";
