@@ -150,13 +150,15 @@ public class User {
                 ", \"userName\":\"" + userName + '\"' +
                 ", \"firstName\":\"" + firstName + '\"' +
                 ", \"lastName\":\"" + lastName + '\"' +
-                ", \"email\":\"" + email + '\"' +
-                ", " + text +
-                ", \"Activities\": [";
+                ", \"email\":\"" + email + '\"';
 
+        if( !text.equals("") )
+            output += ", " + text;
+
+        output += ", \"Activities\": [";
         for (Iterator<Machine> it = machines.iterator(); it.hasNext(); ) {
             Machine m = it.next();
-            output = output.concat(m.toJson());
+            output = output.concat(m.toJson(id));
             if(it.hasNext())
                 output = output.concat(", ");
         }
