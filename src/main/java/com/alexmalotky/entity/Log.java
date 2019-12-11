@@ -101,21 +101,8 @@ public class Log {
         if (this == o) return true;
         if (!(o instanceof Log)) return false;
         Log log = (Log) o;
-        boolean user, machine, date;
-
-        if(this.user == null || log.user == null)
-            user = (this.user == null) && (log.user == null);
-        else
-            user = this.user.equals(log.user);
-
-        if(this.machine == null || log.machine == null)
-            machine = (this.machine == null) && (log.machine == null);
-        else
-            machine = this.machine.equals(log.machine);
-
-        date = this.date == log.date;
-
-        return user && machine && date;
+        return date == log.date &&
+                Objects.equals(value, log.value);
     }
 
     @Override

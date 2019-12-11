@@ -50,7 +50,14 @@ public class Machine {
 
     @Override
     public String toString() {
-        return "'Machine'{" + toJson(null) + "}";
+        return "Machine{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", settings='" + settings + '\'' +
+                ", notes='" + notes + '\'' +
+                ", viewable=" + viewable +
+                ", logs=" + logs +
+                '}';
     }
 
     public String toJson(Integer userId) {
@@ -144,5 +151,11 @@ public class Machine {
     @Override
     public int hashCode() {
         return Objects.hash(name);
+    }
+
+    public void set(Machine rhs) {
+        name = rhs.name;
+        settings = rhs.settings;
+        notes = rhs.notes;
     }
 }

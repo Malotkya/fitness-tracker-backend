@@ -8,8 +8,10 @@ import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import javax.validation.constraints.AssertFalse;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -85,5 +87,19 @@ class JsonDaoTest {
 
         String testJson = dao.getByUserId(u.getId());
         assertTrue(JsonParser.parse(newJson).equals(JsonParser.parse(testJson)));
+    }
+
+    @Test
+    void removeLogTest() {
+        String json = dao.getByUserId(1);
+        User u = JsonParser.parse(json);
+
+        Machine machine = (Machine)u.getMachines().toArray()[0];
+        Set<Log> logs = machine.getLogs();
+        Log log = (Log)logs.toArray()[0];
+        logs.remove(log);
+
+        User newUser = JsonParser.parse(dao.saveOrUpdate(u.toJson()));
+        assertNotEquals(newUser.getMachines(), newUser.getMachines());
     }
 }

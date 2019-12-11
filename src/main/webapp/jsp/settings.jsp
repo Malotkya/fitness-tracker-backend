@@ -4,7 +4,7 @@
             <a class="nav-link" data-toggle="tab" href="#user-settings">Account Settings</a>
         </li>
         <li>
-            <a class="nav-link" data-toggle="tab" href="#new-action">New Action</a>
+            <a class="nav-link" data-toggle="tab" href="#view-all">All Logs</a>
         </li>
     </ul>
 
@@ -12,8 +12,8 @@
         <article class="tab-pane fade d-hidden" id="user-settings">
             <%@include file="account.jsp"%>
         </article>
-        <article class="tab-pane fade d-hidden" id="new-action">
-            <%@include file="actionBuilder.jsp"%>
+        <article class="tab-pane fade d-hidden" id="view-all">
+            <%@include file="all.jsp"%>
         </article>
     </div>
 </article>

@@ -72,17 +72,34 @@ public class JsonDao {
     private void updateMachines(User user) {
 
         //Set up session
-        Session session = getSession();
+        //Session session = getSession();
         Set<Machine> set = user.getMachines();
+        GenericDao<Machine> machineDao = new GenericDao<>(Machine.class);
+
 
         for(Machine m: set) {
-            //Set up transaction
-            Transaction transaction = session.beginTransaction();
+            //Add new logs
+            /*Transaction transaction = session.beginTransaction();
             session.saveOrUpdate(m);
-            transaction.commit();
+            transaction.commit();*/
+            machineDao.saveOrUpdate(m);
+
+            //Remove old logs
+            Machine records = machineDao.getById(m.getId()); //.get(Machine.class, m.getId());
+            GenericDao<Log> logDao = new GenericDao<>(Log.class);
+
+            for(Log l : records.getLogs()) {
+                if( (l.getUser().getId() == user.getId()) && (!m.getLogs().contains(l)) ){
+                    /*for(Log test: m.getLogs() ) {
+                        if( test.equals(l) )*/
+                            logDao.delete(l);
+                    //}
+
+                }
+            }
         }
 
-        session.close();
+        //session.close();
     }
 
     private void deleteMachine(Machine machine) {
