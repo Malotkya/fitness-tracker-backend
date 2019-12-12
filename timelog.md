@@ -11,4 +11,5 @@
 | 11/26 | 10:00 | 13:00 | Login page is working, need to make it stick when page is refreshed | 4.00 |
 | 12/01 | 09:00 | 14:45 | Added Persistence using session storage, but caused issues with login page. | 5.75 |
 | 12/09 | 09:15 | 13:15 | Fixing Login Issues, and issues with top bar, added settings page | 4.00 |
-| 12/10 | 10:00 | 13:00 |  | 3.00 |
+| 12/10 | 10:00 | 13:00 | Added Delete in settings page | 3.00 |
+| 12/11 | 18:15 | 18:30 | Typing Final Report | 0.25|
